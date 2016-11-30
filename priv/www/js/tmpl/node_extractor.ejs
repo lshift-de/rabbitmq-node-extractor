@@ -1,0 +1,174 @@
+<h1>Rabbit Node Extractor</h1>
+<p>Below you see a list of Users and Vhost configurations of
+  current RabbitMQ instance. <br />
+  Select the ones you want to export to the target node.</p>
+
+<br />
+
+<div class="section administrator-only">
+  <h2>1. Node export definitions</h2>
+  <div class="hider updatable">
+      <table class="two-col-layout">
+        <tr>
+          <td>
+            <h3>Vhosts</h3>
+
+            <% if (extractionItems.vhosts.length > 0) { %>
+            <table class="list updatable">
+              <thead>
+                <tr>
+                  <th><%= fmt_sort('Virtual host', 'item') %></th>
+                  <th>Selection</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <%
+                   for (var i = 0; i < extractionItems.vhosts.length; i++) {
+                                       var item = extractionItems.vhosts[i];
+                                       %>
+                   <tr<%= alt_rows(i)%>>
+                     <td>
+                       <a><%= item %></a>
+                     </td>
+                     <td class="c">
+                       <input type="checkbox" class="configCheckbox" name="vhost" value="<%= item %>">
+                     </td>
+                   </tr>
+
+                   <% } %>
+
+                   <% } else { %>
+                   <p>... no vhosts ...</p>
+                   <% } %>
+
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <h3>Users</h3>
+
+            <% if (extractionItems.users.length > 0) { %>
+                <table class="list updatable">
+                  <thead>
+                    <tr>
+                      <th><%= fmt_sort('User name', 'name') %></th>
+                      <th><%= fmt_sort('Tags', 'tags') %></th>
+                      <th>Selection</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    <%
+                       for (var i = 0; i < extractionItems.users.length; i++) {
+                                           var user = extractionItems.users[i];
+                                           %>
+                       <tr<%= alt_rows(i)%>>
+                         <td>
+                           <a><%= user.name %></a>
+                         </td>
+                         <td>
+                           <%= user.tags %>
+                         </td>
+                         <td class="c">
+                           <input type="checkbox" class="configCheckbox" name="username" value="<%= user.name %>">
+                         </td>
+                       </tr>
+
+                       <% } %>
+
+                  </tbody>
+                </table>
+
+                <% } else { %>
+                <p>... no users ...</p>
+                <% } %>
+
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <br />
+            <button id="download-settings">Download broker settings</button>
+            <br />
+          </td>
+        </tr>
+        </table>
+
+  </div>
+</div>
+
+<div id="sendSection" class="section-hidden administrator-only">
+  <h2>2. Taget node settings</h2>
+  <div class="hider updatable">
+
+      <table class="two-col-layout">
+        <tr>
+          <td>
+            <h3>Target Node Admin User</h3>
+
+            <table class="targetUserForm">
+              <tr>
+                <th><label>Remote User:</label></th>
+                <td>
+                  <input type="text" name="uname" class="targetNodeCreds"/>
+                  <!-- <span class="mand">*</span> -->
+                </td>
+              </tr>
+              <tr>
+                <th><label>Remote Pwd:</label></th>
+                <td>
+                  <input type="password" name="pwd" class="targetNodeCreds" />
+                  <!-- <span class="mand">*</span><br/> -->
+                </td>
+              </tr>
+            </table>
+
+          </td>
+          <td>
+            <h3>Target Rabbit Node</h3>
+
+            <table class="form">
+              <tr>
+                <th><label>Hostname:</label></th>
+                <td>
+                  <input type="text" name="hostname" class="targetNodeCreds"/>
+                  <span class="mand">*</span>
+                </td>
+              </tr>
+              <tr>
+                <th><label>Management Port:</label></th>
+                <td>
+                  <input type="text" name="mgmt-port" class="targetNodeCreds"/>
+                  <span class="mand">*</span><br/>
+                </td>
+              </tr>
+              <tr>
+                <th><label>Target Node Status:</label></th>
+                <td>
+                  <label id="targetStatus">?</label><br/>
+                </td>
+              </tr>
+            </table>
+
+            <form method="POST" enctype="multipart/form-data" name="status-form" action="api/remote_status">
+              <input type="hidden" name="remote-auth" value=""/>
+              <input type="hidden" name="remote-url" value=""/>
+            </form>
+
+            <form method="POST" enctype="multipart/form-data" name="upload-form" action="api/extract_settings">
+              <button id="upload-settings" disabled>Upload broker definition</button>
+              <input type="hidden" name="auth" value=""/>
+              <input type="hidden" name="target-url" value=""/>
+              <input type="hidden" name="current-config" value=""/>
+              <input type="hidden" name="selected-hosts" value=""/>
+            </form>
+            <br />
+            <br />
+            <span id="result"></span>
+          </td>
+        </tr>
+      </table>
+
+  </div>
+</div>

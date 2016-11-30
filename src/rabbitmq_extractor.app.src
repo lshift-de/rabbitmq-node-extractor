@@ -1,0 +1,9 @@
+{application, rabbitmq_extractor,
+ [{description, "Embedded Rabbit Node Extractor"},
+  {vsn, "0.0.1"},
+  {modules, []},
+  {registered, []},
+  {mod, {rabbit_extractor, []}},
+  {broker_version_requirements, ["3.7.0"]},
+  {env, [{exchange, <<"test-exchange">>}]},
+  {applications, [kernel, stdlib, rabbit_common, rabbit, rabbitmq_management, amqp_client]}]}.
