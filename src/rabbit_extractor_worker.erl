@@ -26,8 +26,6 @@
 
 -export([send_config/2, fetch_remote_status/1]).
 
-%%-include_lib("amqp_client/include/amqp_client.hrl").
-
 -record(state, {}).
 
 start_link() ->

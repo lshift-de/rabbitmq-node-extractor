@@ -250,11 +250,13 @@ createShovels(Vhosts, _Context = #context{user = User}) ->
     ShovelQueues = [begin
                         QName = pget(name, Q),
                         VHost = pget(vhost, Q),
-                        %#user {username = Username} = User,
+                        #user {username = Username} = User,
                         SrcUri = list_to_binary(
                                    io_lib:format(
-                                     "amqp://~s:~s/~s",
-                                     ["localhost", "5672", binary_to_list(VHost)])),
+                                     "amqp://~s@/~s",
+                                     [Username, binary_to_list(VHost)])),
+
+                        %% TODO: use username of current qname instead of logged in user
 
                         Params = [{"src-uri", SrcUri},
                                   {"src-queue", QName},

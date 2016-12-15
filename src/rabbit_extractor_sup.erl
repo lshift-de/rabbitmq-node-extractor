@@ -25,7 +25,7 @@ start_link() ->
     supervisor:start_link({local, ?MODULE}, ?MODULE, _Arg = []).
 
 init([]) ->
-    {ok, {{one_for_one, 3, 10},
+    {ok, {{one_for_one, 5, 5},
           [{rabbit_extractor_worker,
             {rabbit_extractor_worker, start_link, []},
             permanent,
